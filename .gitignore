@@ -1,0 +1,68 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor de código (VSCode, JetBrains, etc.)
+.vscode/
+.idea/
+*.sublime-workspace
+
+# Configurações de ambiente
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Logs
+logs/
+*.log
+log/
+debug.log
+error.log
+npm-debug.log
+yarn-debug.log
+lerna-debug.log
+pnpm-debug.log
+
+# Build (Arquivos gerados pelo TypeScript)
+dist/
+out/
+build/
+tsconfig.tsbuildinfo
+
+# Dependências do sistema operacional/macOS/Linux/Windows
+.DS_Store
+Thumbs.db
+
+# Arquivos de cache do TypeScript
+*.tsbuildinfo
+
+# Arquivos gerados por pacotes
+coverage/
+.nyc_output/
+*.pid
+*.seed
+*.state
+
+# Docker
+docker-compose.override.yml
+.dockerignore
+
+# Banco de dados (SQLite, Postgres, MySQL, MongoDB)
+*.sqlite
+*.sqlite3
+*.pgsql
+*.mysql
+*.db
+*.pdb
+*.ldb
+*.realm
+dump.rdb
+mongod.lock
+postmaster.pid
+*.log
+*.lock
+
