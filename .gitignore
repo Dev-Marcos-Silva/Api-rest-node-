@@ -3,6 +3,7 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+database/app.db
 
 # Editor de código (VSCode, JetBrains, etc.)
 .vscode/
