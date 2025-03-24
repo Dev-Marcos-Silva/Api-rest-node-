@@ -6,6 +6,7 @@ import { z } from "zod";
 export async function transactionsRoutes(app: FastifyInstance) {
 
     app.get('/', async(request, replay) => {
+        
 
         const transactions = await knex('transactions').select()
 
@@ -13,6 +14,7 @@ export async function transactionsRoutes(app: FastifyInstance) {
     })
 
     app.get('/:id', async(request, replay) => {
+
 
         const getTransactionParams = z.object({
             id: z.string().uuid()
@@ -27,12 +29,14 @@ export async function transactionsRoutes(app: FastifyInstance) {
 
     app.get('/summary', async(resquest, replay) => {
 
+
         const summary = await knex('transactions').sum('amount', { as: 'amount' }).first()
 
         return replay.send({summary})
     })
 
     app.post('/', async(request, replay) =>{
+
 
         const createTransactionBodySchema = z.object({
             title: z.string(),
