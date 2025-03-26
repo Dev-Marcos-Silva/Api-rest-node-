@@ -4,7 +4,23 @@ import { knex } from "../database";
 import { z } from "zod";
 import { checkSessionIdExists } from "../middlewares/check-session-id-exists";
 
+
+// tipos de test //
+// Unitários: Unidade da sua aplícação
+// Integração: comunicação entre duas ou mais unidades
+// e2e - ponta a ponta: Simulam um usuário operando a nossa aplicação
+
+// front-end: navegação e inserir os dados nas paginas
+// back-end: chamadas HTTP, WebSockets
+
+// Pirãmide de testes: E2E 
+
 export async function transactionsRoutes(app: FastifyInstance) {
+
+    // middleware para a routar transactions
+    /*app.addHook('preHandler', async () => {
+        console.log('router transactions...')
+    })*/
 
     app.get('/', { preHandler: [ checkSessionIdExists ] }, async(request, reply) => {
 
