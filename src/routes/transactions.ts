@@ -2,19 +2,22 @@ import { FastifyInstance } from "fastify";
 import { randomUUID } from "node:crypto";
 import { knex } from "../database";
 import { z } from "zod";
+import { checkSessionIdExists } from "../middlewares/check-session-id-exists";
 
 export async function transactionsRoutes(app: FastifyInstance) {
 
-    app.get('/', async(request, replay) => {
+    app.get('/', { preHandler: [ checkSessionIdExists ] }, async(request, reply) => {
+
+        const { sessionId } = request.cookies
         
+        const transactions = await knex('transactions').where('session_id', sessionId).select()
 
-        const transactions = await knex('transactions').select()
-
-        return replay.send({transactions})
+        return reply.send({transactions})
     })
 
-    app.get('/:id', async(request, replay) => {
+    app.get('/:id', { preHandler: [ checkSessionIdExists ] },  async(request, reply) => {
 
+        const { sessionId } = request.cookies
 
         const getTransactionParams = z.object({
             id: z.string().uuid()
@@ -22,20 +25,21 @@ export async function transactionsRoutes(app: FastifyInstance) {
 
         const { id } = getTransactionParams.parse(request.params)
 
-        const transaction = await knex('transactions').select().where({id}).first()
+        const transaction = await knex('transactions').select().where({session_id: sessionId, id}).first()
 
-        return replay.send({transaction})
+        return reply.send({transaction})
     })
 
-    app.get('/summary', async(resquest, replay) => {
+    app.get('/summary', { preHandler: [ checkSessionIdExists ] },  async(request, reply) => {
 
+        const { sessionId } = request.cookies
 
-        const summary = await knex('transactions').sum('amount', { as: 'amount' }).first()
+        const summary = await knex('transactions').where({session_id: sessionId}).sum('amount', { as: 'amount' }).first()
 
-        return replay.send({summary})
+        return reply.send({summary})
     })
 
-    app.post('/', async(request, replay) =>{
+    app.post('/', async(request, reply) =>{
 
 
         const createTransactionBodySchema = z.object({
@@ -52,7 +56,7 @@ export async function transactionsRoutes(app: FastifyInstance) {
 
             sessionId = randomUUID()
 
-            replay.setCookie('sessionId', sessionId,{
+            reply.setCookie('sessionId', sessionId,{
                 path: '/',
                 maxAge: 60 * 60 * 24 * 7 // 7 day
             }) 
@@ -66,6 +70,6 @@ export async function transactionsRoutes(app: FastifyInstance) {
             session_id: sessionId
         })
 
-        return replay.status(201).send()
+        return reply.status(201).send()
     }) 
 }
